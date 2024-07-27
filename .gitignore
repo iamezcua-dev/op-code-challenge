@@ -1,2 +1,12 @@
-# Ignore IDE-related metadata folder
+# IDE-related metadata folder
 .idea/
+
+# Python virtual environment folders
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*_env/
