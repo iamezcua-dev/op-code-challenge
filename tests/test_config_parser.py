@@ -6,12 +6,12 @@ from src.exceptions.exceptions import MalformedConfigFileError
 
 
 class TestConfigParser:
-    sample = "../data/sample_configuration.txt"
-    sample2 = "../data/sample_configuration2.txt"
-    sample3 = "../data/sample_configuration3.txt"
-    sample4 = "../data/sample_configuration4.txt"
-    sample5 = "../data/sample_configuration5.txt"
-    sample6 = "../data/sample_configuration6.txt"
+    sample = "data/sample_configuration.txt"
+    sample2 = "data/sample_configuration2.txt"
+    sample3 = "data/sample_configuration3.txt"
+    sample4 = "data/sample_configuration4.txt"
+    sample5 = "data/sample_configuration5.txt"
+    sample6 = "data/sample_configuration6.txt"
 
     well_formed_inputs = [sample, sample2, sample3]
     malformed_inputs = [sample4, sample5, sample6]
