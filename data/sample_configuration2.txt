@@ -1,0 +1,8 @@
+# comment
+# another comment
+# another yet another comment
+runtime {
+}
+// comment
+// another comment
+// another yet another comment

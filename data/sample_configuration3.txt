@@ -1,0 +1,8 @@
+# comment
+# another comment
+# another yet another comment
+// comment
+// another comment
+// another yet another comment
+funtime {
+}
