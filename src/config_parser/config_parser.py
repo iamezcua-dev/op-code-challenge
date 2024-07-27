@@ -45,7 +45,7 @@ class ConfigParser:
             elif line.endswith('}'):
                 current_block = config_stack.pop()
             else:
-                key, *values = line.split(' ')
+                key, *values = re.split(r'\s+', line)
                 # - The associated value for the key would be of type:
                 #   - None, if the associated string is empty.
                 #   - str, if the length of the associated string is 1.
