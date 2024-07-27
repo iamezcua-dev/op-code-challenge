@@ -39,6 +39,14 @@ class ConfigParser:
                 current_block = new_config_block
             elif line.endswith('}'):
                 current_block = config_stack.pop()
+            else:
+                key, *values = line.split(' ')
+                # - The associated value for the key would be of type:
+                #   - None, if the associated string is empty.
+                #   - str, if the length of the associated string is 1.
+                #   - List[str], if multiple elements were identified.
+                value = None if not values else values[0] if len(values) == 1 else values
+                current_block[key] = value
 
     @property
     def config(self) -> Dict[str, Any]:
