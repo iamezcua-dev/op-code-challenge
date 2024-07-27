@@ -2,14 +2,19 @@ from typing import Tuple, Dict, Any
 
 import pytest
 from src.config_parser.config_parser import ConfigParser
+from src.exceptions.exceptions import MalformedConfigFileError
 
 
 class TestConfigParser:
     sample = "../data/sample_configuration.txt"
     sample2 = "../data/sample_configuration2.txt"
     sample3 = "../data/sample_configuration3.txt"
+    sample4 = "../data/sample_configuration4.txt"
+    sample5 = "../data/sample_configuration5.txt"
+    sample6 = "../data/sample_configuration6.txt"
 
     well_formed_inputs = [sample, sample2, sample3]
+    malformed_inputs = [sample4, sample5, sample6]
 
     @pytest.mark.parametrize('input_path, expected_config', zip(well_formed_inputs, [{}, {}, {}]))
     def test_config_parser_config_initialization(self, input_path, expected_config: Dict[str, Any]):
@@ -95,3 +100,15 @@ class TestConfigParser:
         config_parser.parse_configuration()
         config = config_parser.config
         assert config == expected
+
+    @pytest.mark.parametrize('input_path, expected_exception', zip(
+        malformed_inputs,
+        [MalformedConfigFileError, MalformedConfigFileError, MalformedConfigFileError]
+    ))
+    def test_config_parser_malformed_data_structure(self,
+                                                    input_path: str,
+                                                    expected_exception: MalformedConfigFileError):
+        config_parser: ConfigParser = ConfigParser(config_path=input_path)
+        if expected_exception:
+            with pytest.raises(expected_exception):
+                config_parser.parse_configuration()

@@ -1,6 +1,7 @@
 import re
 from typing import List, Dict, Any
 from src.utils.utils import Utils
+from src.exceptions.exceptions import MalformedConfigFileError
 
 
 class ConfigParser:
@@ -27,6 +28,7 @@ class ConfigParser:
 
         config_stack: List[Dict[str, Any]] = [self.config]
         current_block = self.config
+        open_braces = 0
 
         for line in lines:
             # normalize lines
@@ -41,9 +43,11 @@ class ConfigParser:
                 current_block[block_name] = new_config_block
                 config_stack.insert(0, current_block)
                 current_block = new_config_block
+                open_braces += 1
             # when closing curly brace is found, we should close the configuration
             elif line.endswith('}'):
                 current_block = config_stack.pop()
+                open_braces -= 1
             else:
                 key, *values = re.split(r'\s+', line)
                 # - The associated value for the key would be of type:
@@ -52,6 +56,9 @@ class ConfigParser:
                 #   - List[str], if multiple elements were identified.
                 value = None if not values else values[0] if len(values) == 1 else values
                 current_block[key] = value
+
+        if open_braces != 0:
+            raise MalformedConfigFileError()
 
     @property
     def config(self) -> Dict[str, Any]:
