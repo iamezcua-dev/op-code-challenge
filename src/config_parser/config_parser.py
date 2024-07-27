@@ -19,10 +19,13 @@ class ConfigParser:
         self.__config = {}
 
     def parse_configuration(self):
+        """
+        Parse the configuration file provided and store its contents in a dictionary, for querying values as needed.
+        """
         with open(self.config_path, 'r') as config_file:
             lines = config_file.readlines()
 
-        config_stack = [self.config]
+        config_stack: List[Dict[str, Any]] = [self.config]
         current_block = self.config
 
         for line in lines:
@@ -31,12 +34,14 @@ class ConfigParser:
             # skip empty or comment lines
             if not line or re.match(r'^(#|/{2,})+', line):
                 continue
+            # when we find an opening curly brace, this means a new block of configuration should start
             if line.endswith('{'):
                 block_name = Utils.normalize_line(line[:-1])  # we get the block name
                 new_config_block = {}
                 current_block[block_name] = new_config_block
                 config_stack.insert(0, current_block)
                 current_block = new_config_block
+            # when closing curly brace is found, we should close the configuration
             elif line.endswith('}'):
                 current_block = config_stack.pop()
             else:
