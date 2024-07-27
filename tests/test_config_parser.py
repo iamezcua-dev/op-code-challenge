@@ -31,3 +31,23 @@ class TestConfigParser:
         config_parser.parse_configuration()
         config_keyset = list(config_parser.config.keys())
         assert expected == ('runtime' in config_keyset)
+
+    @pytest.mark.parametrize('input_path, expected', zip(
+        [sample, sample2],
+        [True, False]
+    ))
+    def test_config_parser_data_structure_keys(self, input_path: str, expected: bool):
+        config_parser: ConfigParser = ConfigParser(config_path=input_path)
+        config_parser.parse_configuration()
+        config_keyset = list(config_parser.config['runtime'].keys())
+        assert expected == ('system1' in config_keyset)
+
+    @pytest.mark.parametrize('input_path, expected', zip(
+        [sample],
+        [True]
+    ))
+    def test_config_parser_data_structure_keys(self, input_path: str, expected: bool):
+        config_parser: ConfigParser = ConfigParser(config_path=input_path)
+        config_parser.parse_configuration()
+        config_keyset = list(config_parser.config['runtime']['system1'].keys())
+        assert expected == ('subsystem1' in config_keyset)
