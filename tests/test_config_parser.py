@@ -51,3 +51,47 @@ class TestConfigParser:
         config_parser.parse_configuration()
         config_keyset = list(config_parser.config['runtime']['system1'].keys())
         assert expected == ('subsystem1' in config_keyset)
+
+    # runtime {
+    #     key1 value1
+    #     key2 value2
+    #     flag1
+    #
+    #     system1 {
+    #         prop1 value1
+    #         prop1 value1
+    #         ports 1234 5678 9102
+    #
+    #         subsystem1 {
+    #             prop3 value1 value2 value3
+    #             flag2
+    #         }
+    #     }
+    #     more stuff here
+    # }
+    @pytest.mark.parametrize('input_path, expected', zip(
+        [sample],
+        [
+            {
+                'runtime': {
+                    'key1': 'value1',
+                    'key2': 'value2',
+                    'flag1': None,
+                    'system1': {
+                        'prop1': 'value1',
+                        'ports': ['1234', '5678', '9102'],
+                        'subsystem1': {
+                            'prop3': ['value1', 'value2', 'value3'],
+                            'flag2': None
+                        }
+                    }
+                },
+                'more': ['stuff', 'here']
+            }
+        ]
+    ))
+    def test_config_parser_data_structure_keys(self, input_path: str, expected: Dict[str, Any]):
+        config_parser: ConfigParser = ConfigParser(config_path=input_path)
+        config_parser.parse_configuration()
+        config = config_parser.config
+        assert config == expected
