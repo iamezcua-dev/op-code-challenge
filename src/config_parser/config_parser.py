@@ -41,7 +41,7 @@ class ConfigParser:
                 block_name = Utils.normalize_line(line[:-1])  # we get the block name
                 new_config_block = {}
                 current_block[block_name] = new_config_block
-                config_stack.insert(0, current_block)
+                config_stack.append(current_block)
                 current_block = new_config_block
                 open_braces += 1
             # when closing curly brace is found, we should close the configuration
