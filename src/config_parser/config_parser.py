@@ -67,3 +67,26 @@ class ConfigParser:
     @property
     def config_path(self):
         return self.__config_path
+
+    def get_element(self, the_key: str) -> List[Any] | str | bool | None:
+        """
+        Retrieves the element from the given configuration dictionary with the specified key.
+
+        Args:
+            self: The current instance of the class.
+            the_key (str): The key to search for in the configuration dictionary.
+
+        Returns:
+            List[Any] | str | bool | None: The element associated with the key, if found. Returns None if the key is not present or the element is not found in the nested dictionaries.
+
+        """
+
+        def helper(remaining: Dict[str, Any]) -> List[Any] | str | bool | None:
+            if the_key in remaining:
+                return remaining[the_key]
+
+            for value in remaining.values():
+                if isinstance(value, Dict) and len(value) > 0:
+                    return helper(value)
+
+        return helper(self.config)
